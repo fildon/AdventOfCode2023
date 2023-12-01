@@ -1,4 +1,5 @@
-import { equal } from "node:assert";
+import { strictEqual } from "node:assert";
+import { describe, test } from "node:test";
 
 import { getInputStrings } from "../utils.mjs";
 
@@ -52,8 +53,17 @@ const solvePart2 = (filePath) =>
     })
     .reduce((a, b) => a + b);
 
-equal(solvePart1("./01/input-test1.txt"), 142);
-equal(solvePart1("./01/input-real.txt"), 54573);
-equal(solvePart2("./01/input-test2.txt"), 281);
-equal(solvePart2("./01/input-real.txt"), 54591);
-console.log("✔️");
+describe("Day 01", (t) => {
+  describe("Part 01", () => {
+    test("test input", () =>
+      strictEqual(solvePart1("./01/input-test1.txt"), 142));
+    test("real input", () =>
+      strictEqual(solvePart1("./01/input-real.txt"), 54573));
+  });
+  describe("Part 02", () => {
+    test("test input", () =>
+      strictEqual(solvePart2("./01/input-test2.txt"), 281));
+    test("real input", () =>
+      strictEqual(solvePart2("./01/input-real.txt"), 54591));
+  });
+});
