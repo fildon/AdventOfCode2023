@@ -1,14 +1,9 @@
 // @ts-check
-import { strictEqual } from "node:assert";
-import { describe, test } from "node:test";
-
-import { getInputStrings } from "../utils.mjs";
-
 /**
- * @param {string} filePath
+ * @param {string[]} inputLines
  */
-const solvePart1 = (filePath) =>
-  getInputStrings(filePath)
+export const solvePart1 = (inputLines) =>
+  inputLines
     .filter((line) => line.length > 0)
     .map((line) =>
       line
@@ -47,8 +42,11 @@ const numberMap = [
 
 const toNum = (value) => numberMap[value] ?? value;
 
-const solvePart2 = (filePath) =>
-  getInputStrings(filePath)
+/**
+ * @param {string[]} inputLines
+ */
+export const solvePart2 = (inputLines) =>
+  inputLines
     .filter((line) => line.length > 0)
     .map((line) => {
       const firstMatch = line.match(regex)?.[0];
@@ -56,18 +54,3 @@ const solvePart2 = (filePath) =>
       return parseInt(`${toNum(firstMatch)}${toNum(lastMatch)}}`);
     })
     .reduce((a, b) => a + b);
-
-describe("Day 01", () => {
-  describe("Part 01", () => {
-    test("test input", () =>
-      strictEqual(solvePart1("./01/input-test1.txt"), 142));
-    test("real input", () =>
-      strictEqual(solvePart1("./01/input-real.txt"), 54573));
-  });
-  describe("Part 02", () => {
-    test("test input", () =>
-      strictEqual(solvePart2("./01/input-test2.txt"), 281));
-    test("real input", () =>
-      strictEqual(solvePart2("./01/input-real.txt"), 54591));
-  });
-});

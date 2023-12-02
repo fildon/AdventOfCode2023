@@ -1,9 +1,4 @@
 // @ts-check
-import { strictEqual } from "node:assert";
-import { describe, test } from "node:test";
-
-import { getInputStrings } from "../utils.mjs";
-
 /**
  * Given a string of the form "1 green, 3 red, 6 blue",
  * parse to an object representation of the same information.
@@ -58,7 +53,7 @@ const isPossibleWithConstraint =
 /**
  * @param {string[]} inputStrings
  */
-const solvePart1 = (inputStrings) =>
+export const solvePart1 = (inputStrings) =>
   inputStrings
     .map(lineToGame)
     .filter(isPossibleWithConstraint({ red: 12, green: 13, blue: 14 }))
@@ -79,31 +74,11 @@ const minimumSet = ({ reveals }) =>
   }));
 
 /**
- *
  * @param {string[]} inputStrings
  */
-const solvePart2 = (inputStrings) =>
+export const solvePart2 = (inputStrings) =>
   inputStrings
     .map(lineToGame)
     .map(minimumSet)
     .map(({ red, green, blue }) => red * green * blue)
     .reduce((a, b) => a + b);
-
-describe("Day 02", () => {
-  describe("Part 01", () => {
-    test("test input", () => {
-      strictEqual(solvePart1(getInputStrings("./02/input-test.txt")), 8);
-    });
-    test("real input", () => {
-      strictEqual(solvePart1(getInputStrings("./02/input-real.txt")), 2416);
-    });
-  });
-  describe("Part 02", () => {
-    test("test input", () => {
-      strictEqual(solvePart2(getInputStrings("./02/input-test.txt")), 2286);
-    });
-    test("real input", () => {
-      strictEqual(solvePart2(getInputStrings("./02/input-real.txt")), 63307);
-    });
-  });
-});
