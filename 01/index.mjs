@@ -1,8 +1,12 @@
+// @ts-check
 import { strictEqual } from "node:assert";
 import { describe, test } from "node:test";
 
 import { getInputStrings } from "../utils.mjs";
 
+/**
+ * @param {string} filePath
+ */
 const solvePart1 = (filePath) =>
   getInputStrings(filePath)
     .filter((line) => line.length > 0)
@@ -47,13 +51,13 @@ const solvePart2 = (filePath) =>
   getInputStrings(filePath)
     .filter((line) => line.length > 0)
     .map((line) => {
-      const firstMatch = line.match(regex)[0];
+      const firstMatch = line.match(regex)?.[0];
       const lastMatch = getLastMatch(line);
       return parseInt(`${toNum(firstMatch)}${toNum(lastMatch)}}`);
     })
     .reduce((a, b) => a + b);
 
-describe("Day 01", (t) => {
+describe("Day 01", () => {
   describe("Part 01", () => {
     test("test input", () =>
       strictEqual(solvePart1("./01/input-test1.txt"), 142));
