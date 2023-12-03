@@ -75,3 +75,41 @@ export const solvePart1 = (inputLines) =>
     )
     .map(({ digits }) => parseInt(digits.join("")))
     .reduce((a, b) => a + b);
+
+/**
+ *
+ * @param {string[]} inputLines
+ */
+export const solvePart2 = (inputLines) => {
+  const parts = inputLines.flatMap((line, lineNumber) =>
+    extractEnginePartNumbers(line).map((parts) => ({
+      lineNumber,
+      ...parts,
+    }))
+  );
+
+  const gears = inputLines
+    .flatMap((line, lineNumber) =>
+      line
+        .split("")
+        .flatMap((char, colNumber) =>
+          char === "*" ? { lineNumber, colNumber } : []
+        )
+    )
+    .map((gear) => ({
+      ...gear,
+      parts: parts
+        .filter(
+          (part) =>
+            Math.abs(part.lineNumber - gear.lineNumber) <= 1 &&
+            gear.colNumber >= part.columnNumber - 1 &&
+            gear.colNumber <= part.columnNumber + part.digits.length
+        )
+        .map((part) => parseInt(part.digits.join(""))),
+    }));
+
+  return gears
+    .filter(({ parts }) => parts.length === 2)
+    .map(({ parts: [first, second] }) => first * second)
+    .reduce((a, b) => a + b);
+};
