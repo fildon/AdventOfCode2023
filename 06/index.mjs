@@ -28,12 +28,17 @@ const countWaysToWin = ({ time, distance }) => {
   // Fundamentally we want to count how many integer values of buttonTime yield
   // a positive value for the above equation
 
-  // generate integers from 1 to time - 1 (inclusive)
-  const validButtonTimes = new Array(time - 1).fill(0).map((_, i) => i + 1);
-
-  return validButtonTimes.filter(
-    (buttonTime) => -1 * buttonTime ** 2 + time * buttonTime - distance > 0
-  ).length;
+  // Using the quadratic formula:
+  const a = -1;
+  const b = time;
+  const c = -distance;
+  const lowerRoot = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+  const upperRoot = (-b - Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+  const lowestValidInt =
+    lowerRoot === Math.ceil(lowerRoot) ? lowerRoot + 1 : Math.ceil(lowerRoot);
+  const highestValidInt =
+    upperRoot === Math.floor(upperRoot) ? upperRoot - 1 : Math.floor(upperRoot);
+  return highestValidInt - lowestValidInt + 1;
 };
 
 /**
