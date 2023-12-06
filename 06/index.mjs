@@ -44,3 +44,22 @@ export const solvePart1 = (inputLines) => {
   const waysToWin = races.map(countWaysToWin);
   return waysToWin.reduce((a, b) => a * b);
 };
+
+/**
+ * @param {string[]} inputLines
+ */
+export const solvePart2 = (inputLines) => {
+  const time = parseInt(
+    inputLines[0]
+      .split("")
+      .filter((char) => /\d/.exec(char))
+      .join("")
+  );
+  const distance = parseInt(
+    inputLines[1]
+      .split("")
+      .filter((char) => /\d/.exec(char))
+      .join("")
+  );
+  return countWaysToWin({ time, distance });
+};
