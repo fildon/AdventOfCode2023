@@ -1,7 +1,5 @@
 // @ts-check
 
-import { getInputStrings } from "../utils.mjs";
-
 /**
  * @param {string[]} inputStrings
  * @returns {{ directions: string, graph: Object.<string, { L: string, R: string }> }}}
@@ -39,38 +37,51 @@ export const solvePart1 = (inputStrings) => {
   return steps;
 };
 
-const inputStrings = getInputStrings("./08/input-real.txt");
+/**
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ */
+const gcd = (a, b) => (b ? gcd(b, a % b) : a);
 
-const { directions, graph } = parseInput(inputStrings);
+/**
+ * @param {number} a
+ * @param {number} b
+ */
+const lcm = (a, b) => (a * b) / gcd(a, b);
 
-const starts = Object.keys(graph).filter((key) => key.at(-1) === "A");
+/**
+ * @param {string[]} inputStrings
+ */
+export const solvePart2 = (inputStrings) => {
+  const { directions, graph } = parseInput(inputStrings);
 
-starts.forEach((start) => {
-  let steps = 0;
-  let instructionPointer = 0;
-  let location = start;
+  const starts = Object.keys(graph).filter((key) => key.at(-1) === "A");
 
-  /**
-   * @type {string[]}
-   */
-  const visitedStates = [];
+  return starts
+    .map((start) => {
+      let steps = 0;
+      let instructionPointer = 0;
+      let location = start;
 
-  while (!visitedStates.includes(`${location}:${instructionPointer}`)) {
-    visitedStates.push(`${location}:${instructionPointer}`);
+      /**
+       * @type {string[]}
+       */
+      const visitedStates = [];
 
-    const direction = directions[instructionPointer];
-    location = graph[location][direction];
-    steps++;
-    instructionPointer = (instructionPointer + 1) % directions.length;
-  }
+      while (!visitedStates.includes(`${location}:${instructionPointer}`)) {
+        visitedStates.push(`${location}:${instructionPointer}`);
 
-  console.log({
-    // start,
-    // loopStartNode: `${location}:${instructionPointer}`,
-    loopStartIndex: visitedStates.indexOf(`${location}:${instructionPointer}`),
-    loopLength:
-      visitedStates.length -
-      visitedStates.indexOf(`${location}:${instructionPointer}`),
-    // terminators: visitedStates.filter((x) => x[2] === "Z").length,
-  });
-})
+        const direction = directions[instructionPointer];
+        location = graph[location][direction];
+        steps++;
+        instructionPointer = (instructionPointer + 1) % directions.length;
+      }
+
+      return (
+        visitedStates.length -
+        visitedStates.indexOf(`${location}:${instructionPointer}`)
+      );
+    })
+    .reduce((acc, loop) => lcm(acc, loop));
+};
