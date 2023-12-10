@@ -51,7 +51,7 @@ const createGetNeighbours =
 /**
  * @param {string[]} inputStrings
  */
-export const solvePart1 = (inputStrings) => {
+const getLoopMembers = (inputStrings) => {
   const pipeMap = inputStrings.map((inputString) => inputString.split(""));
   const getNeighbours = createGetNeighbours(pipeMap);
   const startY = inputStrings
@@ -80,18 +80,10 @@ export const solvePart1 = (inputStrings) => {
 
   pointers.forEach(({ x, y }) => visited.add(`${x}:${y}`));
 
-  /**
-   * How many steps we have searched.
-   * The start "S" is at zero, but these pointers start one step out.
-   */
-  let distance = 1;
-
   while (
     // While the pointers are not equal
     !(pointers[0].x === pointers[1].x && pointers[0].y === pointers[1].y)
   ) {
-    distance++;
-
     pointers = pointers.map(
       (pointer) =>
         getNeighbours(pointer).filter(
@@ -102,5 +94,11 @@ export const solvePart1 = (inputStrings) => {
     pointers.forEach(({ x, y }) => visited.add(`${x}:${y}`));
   }
 
-  return distance;
+  return visited;
 };
+
+/**
+ * @param {string[]} inputStrings
+ */
+export const solvePart1 = (inputStrings) =>
+  getLoopMembers(inputStrings).size / 2;
