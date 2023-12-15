@@ -4,7 +4,7 @@ import { describe, test } from "node:test";
 
 import { getInput } from "../utils.mjs";
 
-import { solvePart1 } from "./index.mjs";
+import { solvePart1, solvePart2 } from "./index.mjs";
 
 describe("Day 15", () => {
   describe("Part 01", () => {
@@ -16,6 +16,17 @@ describe("Day 15", () => {
     });
     test("real input", () => {
       strictEqual(solvePart1(getInput("./15/input-real.txt")), 517965);
+    });
+  });
+  describe("Part 02", () => {
+    test("test input", () => {
+      strictEqual(
+        solvePart2("rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"),
+        145
+      );
+    });
+    test("real input", () => {
+      strictEqual(solvePart2(getInput("./15/input-real.txt")), 267372);
     });
   });
 });
