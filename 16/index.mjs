@@ -36,11 +36,12 @@ const backSlashMap = {
 };
 
 /**
- * @param {string[]} inputStrings
+ * @param {string[]} floorMap
+ * @param {{ x: number, y: number, dir: ('E'|'N'|'W'|'S') }} startingBeam
  */
-export const solvePart1 = (inputStrings) => {
-  const height = inputStrings.length;
-  const width = inputStrings[0].length;
+const countLava = (floorMap, startingBeam) => {
+  const height = floorMap.length;
+  const width = floorMap[0].length;
 
   /**
    * Set of visited states of the form `${x},${y};${dir}
@@ -48,11 +49,7 @@ export const solvePart1 = (inputStrings) => {
    */
   const visitedBeamStates = new Set([]);
 
-  /**
-   * @type {Array<{ x: number, y: number, dir: ('E'|'N'|'W'|'S') }>}
-   */
-  let beams = [{ x: 0, y: 0, dir: "E" }];
-
+  let beams = [startingBeam];
   while (beams.length > 0) {
     beams = beams.flatMap((beam) => {
       // This beam has exited the map. No further processing required.
@@ -63,7 +60,7 @@ export const solvePart1 = (inputStrings) => {
       if (visitedBeamStates.has(`${beam.x},${beam.y};${beam.dir}`)) return [];
 
       visitedBeamStates.add(`${beam.x},${beam.y};${beam.dir}`);
-      const cell = inputStrings[beam.y][beam.x];
+      const cell = floorMap[beam.y][beam.x];
       if (cell === "/") {
         beam.dir = forwardSlashMap[beam.dir];
       } else if (cell === "\\") {
@@ -82,3 +79,42 @@ export const solvePart1 = (inputStrings) => {
   return new Set([...visitedBeamStates.values()].map((x) => x.split(";")[0]))
     .size;
 };
+
+/**
+ * @param {string[]} inputStrings
+ */
+export const solvePart1 = (inputStrings) =>
+  countLava(inputStrings, { x: 0, y: 0, dir: "E" });
+
+/**
+ * @param {number} height
+ * @param {number} width
+ * @return {Array<{ x: number, y: number, dir: ('E'|'N'|'W'|'S') }>}
+ */
+// @ts-ignore
+const createAllStartingBeams = (height, width) => [
+  ...Array.from({ length: height }).flatMap((_, y) => [
+    { x: 0, y, dir: "E" },
+    { x: width - 1, y, dir: "W" },
+  ]),
+  ...Array.from({ length: width }).flatMap((_, x) => [
+    {
+      x,
+      y: 0,
+      dir: "S",
+    },
+    {
+      x,
+      y: height - 1,
+      dir: "N",
+    },
+  ]),
+];
+
+/**
+ * @param {string []} inputStrings
+ */
+export const solvePart2 = (inputStrings) =>
+  createAllStartingBeams(inputStrings.length, inputStrings[0].length)
+    .map((startingBeam) => countLava(inputStrings, startingBeam))
+    .reduce((a, b) => Math.max(a, b));
